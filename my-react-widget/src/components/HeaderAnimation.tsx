@@ -1,14 +1,11 @@
 import React from 'react';
+import signatureSvg from '../../public/header-animation.svg?raw';
 
 export const AnimatedIcon: React.FC = () => {
   return (
-    <object
-      type="image/svg+xml"
-      data="/header-animation.svg"
-      width={700}
-      height={700}
-      aria-label="SVGator Animation"
+    <div
+      className="header-animation"
+      dangerouslySetInnerHTML={{ __html: signatureSvg }}
     />
   );
 };
-

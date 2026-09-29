@@ -62,19 +62,76 @@ textarea {
   font-family: inherit;
 }
 body.Light {
-  --surface-color: #f7f7f7;
-  --border-color: #d9d9d9;
-  --muted-color: #626262;
-  --primary-color: rgba(255, 255, 255, 0.5);
-  --text-color: #000000;
-  --text-color2: #000000;
-  --square-color: rgba(0, 0, 0, 0.1);
-  --navbar-color: rgba(255, 255, 255, 0.5);
+  color-scheme: light;
+  --surface-color: #f5f5f3;
+  --border-color: #cececa;
+  --muted-color: #60605c;
+  --primary-color: #eaeae6;
+  --text-color: #30302e;
+  --text-color2: #484845;
+  --square-color: rgba(215, 215, 209, 0.92);
+  --navbar-color: #d7d7d1;
+  --transparent-white: rgba(48, 48, 46, 0.035);
 }
 
 body.Light .dot {
-  background: var(--primary-color);
-  opacity: 0.4;
+  background: var(--muted-color);
+  opacity: 0.18;
+}
+
+/* Soft neutral surfaces, with stronger contrast reserved for controls. */
+body.Light .navbar,
+body.Light .AboutMeCard,
+body.Light #Skills,
+body.Light .contactCard,
+body.Light .AboutMeImage {
+  border-color: var(--border-color);
+}
+
+body.Light .AboutMeCard,
+body.Light #Skills,
+body.Light .contactCard {
+  background-color: var(--surface-color);
+}
+
+body.Light .navbar i,
+body.Light #toggle {
+  color: var(--text-color);
+}
+
+body.Light #circle i,
+body.Light .contactSubmit {
+  color: var(--surface-color);
+}
+
+body.Light .HeroSection #btn1,
+body.Light .HeroSection #btn2,
+body.Light .contactForm input,
+body.Light .contactForm textarea {
+  background-color: var(--surface-color);
+  border-color: #85857f;
+}
+
+body.Light .contactForm input::placeholder,
+body.Light .contactForm textarea::placeholder,
+body.Light .FooterSection {
+  color: var(--muted-color);
+}
+
+body.Light .contactForm input:focus,
+body.Light .contactForm textarea:focus {
+  border-color: var(--text-color);
+  box-shadow: 0 0 0 3px rgba(48, 48, 46, 0.16);
+}
+
+body.Light .FooterSection .footer-placeholder {
+  border-color: var(--border-color);
+}
+
+body.Light .contactError {
+  color: #a13232;
+  border-color: rgba(161, 50, 50, 0.35);
+  background: rgba(161, 50, 50, 0.06);
 }
 
 /* Dots background */
