@@ -1,5 +1,24 @@
 # Codex handoff
 
+## 2026-10-09 — GitHub Pages contact origin
+
+- Portfolio is now hosted at `https://aionseeker.github.io/ME/`. User reports
+  adding `aionseeker.github.io` to the reCAPTCHA allowed domains.
+- `worker/wrangler.toml` sets `PUBLIC_ORIGIN=https://aionseeker.github.io`.
+  Worker accepts it alongside any existing `ALLOWED_ORIGIN` secret entries.
+  Origins have no `/ME/` path or trailing slash. Empty config rejects all origins;
+  rejected preflights return 403 without an Access-Control-Allow-Origin header.
+- Raised the production reCAPTCHA score threshold from 0.3 to 0.5.
+- Updated Worker setup/deployment documentation. Existing email defaults and
+  API-key secrets are unchanged.
+- Syntax and whitespace checks passed. Local mocked checks passed for production
+  and local origins, rejected/missing origins, empty config, CAPTCHA rejection
+  below 0.5, and mocked delivery at 0.5. No real emails were sent.
+- Live deployment remains pending: Wrangler could not refresh its saved token
+  (400 Bad Request, Not logged in). Run `npx wrangler login`, then
+  `npx wrangler deploy` from `worker/`. GitHub push does not deploy the Worker.
+  Live CAPTCHA/email delivery has not been retested.
+
 ## 2026-10-09 — About Me typography and layout
 
 Read this entry first for the About Me section, then the earlier notes for

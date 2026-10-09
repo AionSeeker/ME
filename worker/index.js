@@ -1,28 +1,23 @@
 // Cloudflare Worker: verifies Google reCAPTCHA v3 token, then forwards email via Resend.
 //
-// Required secrets (set with `wrangler secret put <NAME>`):
+// Secrets and optional overrides (set with `wrangler secret put <NAME>`):
 //   RECAPTCHA_SECRET   - Google reCAPTCHA v3 secret key
-//   ALLOWED_ORIGIN     - Comma-separated list of allowed origins, e.g.
-//                        "https://aionseeker.dev,http://localhost:8000"
-//                        Leave empty to allow any origin (DEV ONLY).
+//   ALLOWED_ORIGIN     - Optional comma-separated additional origins for local testing.
 //   RESEND_API_KEY     - Resend API key (https://resend.com/api-keys)
 //   TO_EMAIL           - Destination address (defaults to ammar from below)
 //   FROM_EMAIL         - Sender address (defaults to onboarding@resend.dev)
+// Production origin is configured as PUBLIC_ORIGIN in wrangler.toml.
 
 const TO_EMAIL_DEFAULT = "ammaryasseryasser49@gmail.com";
 const FROM_EMAIL_DEFAULT = "onboarding@resend.dev";
-// v3 score threshold. 0.5 is Google's default recommendation. For local
-// development / testing with fresh browsers, scores can come back very low
-// (0.1–0.3) because Google has no history on the user. We log the score
-// either way so you can tune this to your needs.
-const SCORE_THRESHOLD = 0.3;
+// Production threshold; low-scoring tokens are rejected before sending email.
+const SCORE_THRESHOLD = 0.5;
 
 function corsHeaders(allowedOrigin) {
   // IMPORTANT: only a single origin (or "*") is valid in
   // Access-Control-Allow-Origin. Never pass a comma-separated list here.
-  const allow = allowedOrigin || "*";
   return {
-    "Access-Control-Allow-Origin": allow,
+    ...(allowedOrigin ? { "Access-Control-Allow-Origin": allowedOrigin } : {}),
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Max-Age": "86400",
@@ -31,13 +26,13 @@ function corsHeaders(allowedOrigin) {
 }
 
 function getAllowedList(env) {
-  const raw = (env.ALLOWED_ORIGIN || "").trim();
-  if (!raw) return null; // null = allow any
-  return raw.split(",").map((s) => s.trim()).filter(Boolean);
+  return [env.PUBLIC_ORIGIN || "", env.ALLOWED_ORIGIN || ""]
+    .flatMap((value) => value.split(","))
+    .map((value) => value.trim())
+    .filter(Boolean);
 }
 
 function isOriginAllowed(origin, allowedList) {
-  if (allowedList === null) return true;
   if (!origin) return false;
   return allowedList.includes(origin);
 }
@@ -104,19 +99,18 @@ export default {
     const origin = request.headers.get("Origin") || "";
     const allowedList = getAllowedList(env);
     const allowedHere = isOriginAllowed(origin, allowedList);
-    // CRITICAL: echoedOrigin must be ONE origin or "*". It is the request's
-    // own Origin (a single string) when allowed — never the list.
-    const echoedOrigin = allowedHere ? (origin || "*") : "*";
+    // Echo only an allowed request origin, never the whole allowlist.
+    const echoedOrigin = allowedHere ? origin : "";
 
     // Debug: log every request so you can confirm the deployed version.
     console.log(
       `[v3] ${request.method} from origin=${JSON.stringify(origin)} allowedHere=${allowedHere}`,
     );
 
-    // CORS preflight — always echo CORS headers so the browser can decide.
+    // Reject unlisted origins for preflights as well as submissions.
     if (request.method === "OPTIONS") {
       return new Response(null, {
-        status: 204,
+        status: allowedHere ? 204 : 403,
         headers: corsHeaders(echoedOrigin),
       });
     }

@@ -21,7 +21,7 @@ perfect while you don't have one yet.
 2. Click **+** to create a new site.
 3. Label: anything (e.g. "Portfolio").
 4. reCAPTCHA type: **reCAPTCHA v3**.
-5. Domains: add `localhost` (for testing) and your real domain (e.g. `aionseeker.dev`).
+5. Domains: add `localhost` (for testing) and `aionseeker.github.io` (the deployed portfolio domain).
 6. Copy the **Site key** and **Secret key**.
 
 ### 2. Get a Resend API key
@@ -43,14 +43,18 @@ Set the secrets (paste values when prompted):
 ```bash
 npx wrangler secret put RECAPTCHA_SECRET      # paste reCAPTCHA secret key
 npx wrangler secret put RESEND_API_KEY        # paste Resend API key
-npx wrangler secret put ALLOWED_ORIGIN        # comma-separated list, e.g.
-                                              # "http://localhost:8000,http://192.168.1.10:8080"
-                                              # leave empty to allow any origin (DEV ONLY)
 ```
+
+The production site is https://aionseeker.github.io/ME/. Its browser origin,
+`https://aionseeker.github.io`, is checked into `wrangler.toml` as `PUBLIC_ORIGIN`.
+Do not include `/ME/` or a trailing slash in the origin. The existing
+`ALLOWED_ORIGIN` secret remains supported for additional local origins; it does
+not replace the production origin. An empty configuration allows no origins.
 
 Optional overrides:
 
 ```bash
+npx wrangler secret put ALLOWED_ORIGIN # optional, e.g. http://localhost:8000
 npx wrangler secret put TO_EMAIL      # defaults to ammar...@gmail.com
 npx wrangler secret put FROM_EMAIL    # defaults to onboarding@resend.dev
 ```
@@ -60,6 +64,9 @@ npx wrangler secret put FROM_EMAIL    # defaults to onboarding@resend.dev
 ```bash
 npx wrangler deploy
 ```
+
+Pushing to GitHub updates the portfolio source; run this deploy command to update
+the live Cloudflare Worker too. Existing API-key secrets are preserved.
 
 This prints a URL like:
 
@@ -109,7 +116,7 @@ that while developing.
    which returns a one-time token.
 3. JS POSTs `{ name, email, message, token }` to the Worker as JSON.
 4. Worker:
-   - Verifies `Origin` matches `ALLOWED_ORIGIN`.
+   - Verifies `Origin` matches `PUBLIC_ORIGIN` or an additional `ALLOWED_ORIGIN` entry.
    - POSTs the token to Google's `siteverify` endpoint.
    - Rejects if `success !== true` or `score < 0.5`.
    - Otherwise POSTs the email to Resend's `/emails` endpoint.
@@ -118,8 +125,8 @@ that while developing.
 
 ## Troubleshooting
 
-- **`403 forbidden_origin`** — your `ALLOWED_ORIGIN` secret doesn't match the
-  page's origin. For local dev, set it to `http://localhost:8000`.
+- **`403 forbidden_origin`** — the page's origin is absent from `PUBLIC_ORIGIN` and
+  the optional `ALLOWED_ORIGIN` secret. For local dev, set it to `http://localhost:8000`.
 - **`403 captcha_failed`** — token invalid or score below 0.5. Check that the
   site key in `main.js` matches the secret key's pair, and that the current
   origin is in the reCAPTCHA admin's allowed domains list.
