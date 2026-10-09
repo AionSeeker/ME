@@ -1,5 +1,30 @@
 # Codex handoff
 
+## 2026-10-09 — handwritten header polish
+
+- Refined the header at the user's request, preserving every original lettering
+  and underline path. The current header is an inline, self-contained SVG;
+  older notes about an SVG object or external animation runtime are obsolete.
+- Cropped its empty square canvas to `viewBox="-5 90 260 95"`. The responsive
+  wrapper follows that ratio, keeps 24 px side gutters, and uses fluid vertical
+  spacing so the signature and hero buttons sit closer together.
+- Slightly strengthened the lettering, made the underline lighter, and reduced
+  the i-dot size. The name draws first, followed by the crossbar, dot, and eased
+  underline; the sequence finishes at 4.84 seconds. Future strokes stay fully
+  hidden until their turn, avoiding tiny round-cap marks before drawing starts.
+- Theme colors still use `currentColor`; reduced motion shows the completed
+  signature immediately. Navigation and section reveal behavior are unchanged.
+- Edit `my-react-widget/public/header-animation.svg`, keep the root
+  `header-animation.svg` copy synchronized, and rebuild the React bundle.
+  Wrapper spacing is in `my-react-widget/src/App.css`.
+- `npm run build`, `npm run lint`, and `git diff --check` passed. SVG parsing,
+  unchanged path geometry, and source/copy consistency were checked. Completed
+  SVG renders were inspected in both themes and at desktop/mobile asset sizes.
+  No browser was available, so live playback and full-page responsive layout
+  were not visually verified. Temporary renders are in `/tmp/header-polish-preview/`.
+- The pre-existing footer whitespace edit in `src/App.jsx` remains outside
+  this change. Earlier local Worker deployment notes below are preserved.
+
 ## 2026-10-09 — GitHub Pages contact origin
 
 - Portfolio is now hosted at `https://aionseeker.github.io/ME/`. User reports
@@ -14,10 +39,17 @@
 - Syntax and whitespace checks passed. Local mocked checks passed for production
   and local origins, rejected/missing origins, empty config, CAPTCHA rejection
   below 0.5, and mocked delivery at 0.5. No real emails were sent.
-- Live deployment remains pending: Wrangler could not refresh its saved token
-  (400 Bad Request, Not logged in). Run `npx wrangler login`, then
-  `npx wrangler deploy` from `worker/`. GitHub push does not deploy the Worker.
-  Live CAPTCHA/email delivery has not been retested.
+- Worker changes were pushed to `main` in commit `1ddce90`. The user then
+  logged back into Cloudflare and deployed successfully.
+- Live checks on 2026-10-09 confirmed that the Worker returns 204 for an OPTIONS
+  preflight from `https://aionseeker.github.io`, with that exact origin in
+  Access-Control-Allow-Origin. An unlisted origin returns 403 without that header.
+- Browser reCAPTCHA and actual email delivery still need an end-to-end form
+  submission. No live test email was sent during these checks.
+- GitHub push does not deploy the Worker; future Worker changes also require
+  `npx wrangler deploy` from `worker/`.
+- Image changes were separately committed and pushed in `c8bc63f`; only the
+  unrelated React whitespace edit remained uncommitted before this notes update.
 
 ## 2026-10-09 — About Me typography and layout
 
