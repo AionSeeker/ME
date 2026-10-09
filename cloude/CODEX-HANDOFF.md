@@ -1,5 +1,21 @@
 # Codex handoff
 
+## 2026-10-09 — refresh cached widget assets after deployment
+
+- Investigated the report that Pages said deployed but the domain still looked
+  unchanged. Pages builds from `main` at `/`; the deployment of `cd658ef`
+  succeeded. Direct downloads of the live HTML, widget JS, and widget CSS
+  matched local files byte-for-byte. Responses used `Cache-Control: max-age=600`,
+  making a previously cached browser copy the likely cause.
+- `npm run build` now runs `scripts/version-host-assets.mjs` after Vite. It
+  computes content hashes for the two built widget assets and updates their
+  `?v=` URLs in the root `index.html`. Bundle filenames remain unchanged.
+  Commit the updated root HTML together with future rebuilt widget assets.
+- Build, lint, whitespace checks, and matching each URL version to its asset's
+  SHA-256 passed. The existing unrelated `src/App.jsx` whitespace is preserved.
+- Visitors with the old HTML cached may need one hard refresh (`Ctrl+Shift+R`)
+  or a fresh page query string to load the versioned references initially.
+
 ## 2026-10-09 — handwritten header polish
 
 - Refined the header at the user's request, preserving every original lettering
