@@ -1,5 +1,27 @@
 # Codex handoff
 
+## 2026-10-09 — About Me typography and layout
+
+Read this entry first for the About Me section, then the earlier notes for
+navigation, reveals, and project layout.
+
+- Organized the user's new bio into separate paragraphs, preserving its content.
+- The profile card now has a smaller avatar, interest tags, and a separated
+  summary. The name uses an h2 below the section heading.
+- Replaced the empty Skills placeholder with the biography and a highlighted
+  "Currently focused on" block.
+- The layout uses two columns above 768 px and stacks on smaller screens.
+  Typography, borders, and surfaces use the existing dark/light theme tokens.
+- Changes are in `index.html` and `style.css`; no React rebuild is required.
+- `git diff --check` passed. Visual browser verification was unavailable because
+  no browser was connected; responsive and theme rendering remain unverified.
+- Unrelated user edits to `public/MPDimage.png`, `public/1.png`, and a blank line
+  in `my-react-widget/src/App.jsx` were left outside this commit.
+
+Preserve the current header artwork, repeat-on-entry reveals, navigation,
+scrolling dots, and contact behavior. Older deployment and credential follow-ups
+remain unverified; check their current status before acting.
+
 ## 2026-09-20 — responsive projects and Manrope typography
 
 Read this entry first, then the September 10 notes for navigation and reveals.
