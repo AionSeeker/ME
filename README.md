@@ -7,7 +7,7 @@
 Projects, a little about me, and a way to get in touch.<br>
 Monochrome design. Handwritten details. A little motion.
 
-[Visit the portfolio](https://aionseeker.github.io/ME/) &nbsp; · &nbsp; [Get in touch](https://aionseeker.github.io/ME/#contact)
+[Visit the portfolio](https://aionseeker.github.io/My-personal-portfolio/) &nbsp; · &nbsp; [Get in touch](https://aionseeker.github.io/My-personal-portfolio/#contact)
 
 </div>
 
@@ -83,6 +83,6 @@ MIT.
 <div align="center">
 
 Made by **Ammar Yasser**<br>
-[Portfolio](https://aionseeker.github.io/ME/) &nbsp; · &nbsp; [Email](mailto:ammaryasseryasser49@gmail.com)
+[Portfolio](https://aionseeker.github.io/My-personal-portfolio/) &nbsp; · &nbsp; [Email](mailto:ammaryasseryasser49@gmail.com)
 
 </div>
