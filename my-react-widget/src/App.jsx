@@ -52,6 +52,7 @@ function FooterSection() {
     <section className="FooterSection">
       <div className="footer-placeholder">
         {/* TODO: footer content */}
+
       </div>
     </section>
   );
