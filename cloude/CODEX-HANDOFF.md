@@ -1,5 +1,18 @@
 # Codex handoff
 
+## 2026-10-10 — portfolio README
+
+- Rewrote the root `README.md` to match the portfolio's minimal style, with a
+  centered introduction, live-site/contact links, a short bio, and feature notes.
+- Documented local preview with Python, React widget development and rebuilding,
+  asset versioning, the repository layout, and separate Worker setup/deployment.
+- This is a documentation-only change; no frontend rebuild was needed.
+  `git diff --check` passed, and instructions were checked against the repository.
+- Existing user edits to the header asset location and
+  `my-react-widget/src/components/HeaderAnimation.tsx` are outside this change.
+  Check their current state before following the older header path guidance.
+- The handoff stays tracked; `save_conversatioin.txt` remains a local session log.
+
 ## 2026-10-09 — refresh cached widget assets after deployment
 
 - Investigated the report that Pages said deployed but the domain still looked
